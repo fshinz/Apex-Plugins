@@ -11,6 +11,7 @@ import { storage } from "@vendetta/plugin";
 import { React } from "@vendetta/metro/common";
 import AccountSwitcherSettings from "./Settings";
 import patchSidebar from "./SidebarPatcher";
+import patchNativeSwitcher from "./NativeSwitcher";
 
 const {
 	meta: { resolveSemanticColor },
@@ -37,7 +38,8 @@ if (!storage.settings) {
 		enableCLI: true,
 		confirmBeforeDelete: true,
 		enableUnsafeFeatures: false,
-		addToSidebar: true // Now using the correct patchSettingsPin method
+		addToSidebar: true, // Now using the correct patchSettingsPin method
+		enableNativeSwitcher: true
 	};
 } else {
 	// Ensure all properties exist and migrate old settings
@@ -52,6 +54,9 @@ if (!storage.settings) {
 	}
 	if (storage.settings.addToSidebar === undefined) {
 		storage.settings.addToSidebar = true; // Now using correct method
+	}
+	if (storage.settings.enableNativeSwitcher === undefined) {
+		storage.settings.enableNativeSwitcher = true;
 	}
 	// Remove old setting
 	if (storage.settings.showAccountNames !== undefined) {
@@ -123,6 +128,9 @@ export default {
 		// Add sidebar patcher
 		const sidebarUnpatch = patchSidebar();
 		this.patches.push(sidebarUnpatch);
+
+		const nativeSwitcherUnpatch = patchNativeSwitcher();
+		this.patches.push(nativeSwitcherUnpatch);
 
 		// Context menu patch for copying tokens
 		const optionLabel = "Copy Token";
