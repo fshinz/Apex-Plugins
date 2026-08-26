@@ -30,7 +30,8 @@ if (!storage.settings) {
     enableCLI: true,
     confirmBeforeDelete: true,
     enableUnsafeFeatures: false,
-    addToSidebar: true
+    addToSidebar: true,
+    enableNativeSwitcher: true
   };
 } else {
   
@@ -45,6 +46,9 @@ if (!storage.settings) {
   }
   if (storage.settings.addToSidebar === undefined) {
     storage.settings.addToSidebar = true;
+  }
+  if (storage.settings.enableNativeSwitcher === undefined) {
+    storage.settings.enableNativeSwitcher = true;
   }
 
   if (storage.settings.showAccountNames !== undefined) {
@@ -509,6 +513,44 @@ function SettingsPage({ onBack }) {
               } else {
                 showToast("Sidebar disabled - restart app to remove", 0);
               }
+            },
+            trackColor: { false: '#72767d', true: '#7289da' },
+            thumbColor: 'white'
+          })
+        ]),
+
+        React.createElement(ReactNative.View, {
+          key: "enable-native-switcher",
+          style: { 
+            flexDirection: 'row', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            paddingVertical: 12,
+            backgroundColor: '#36393f',
+            paddingHorizontal: 16,
+            borderRadius: 8,
+            marginBottom: 8
+          }
+        }, [
+          React.createElement(ReactNative.View, { 
+            key: "text-container", 
+            style: { flex: 1 } 
+          }, [
+            React.createElement(ReactNative.Text, {
+              key: "label",
+              style: { color: 'white', fontSize: 16 }
+            }, "Enable Native Multi-Account Switcher"),
+            React.createElement(ReactNative.Text, {
+              key: "desc",
+              style: { color: '#72767d', fontSize: 12, marginTop: 2 }
+            }, "Unlocks Discord's own built-in account switcher (restart app to apply)")
+          ]),
+          React.createElement(ReactNative.Switch, {
+            key: "toggle",
+            value: storage.settings.enableNativeSwitcher,
+            onValueChange: (v) => {
+              updateSetting("enableNativeSwitcher", v);
+              showToast("Restart app to apply", 0);
             },
             trackColor: { false: '#72767d', true: '#7289da' },
             thumbColor: 'white'

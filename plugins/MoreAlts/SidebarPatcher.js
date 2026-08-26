@@ -4,24 +4,17 @@ import { getAssetIDByName } from "@vendetta/ui/assets";
 import { after } from "@vendetta/patcher";
 import { Forms } from "@vendetta/ui/components";
 import { findInReactTree } from "@vendetta/utils";
-import { findByProps } from "@vendetta/metro";
+import { findByProps, findByName } from "@vendetta/metro";
 import { logger } from "@vendetta";
 import AccountSwitcherSettings from "./Settings";
 
 const { FormSection, FormRow } = Forms;
 const { TableRowIcon } = findByProps("TableRowIcon");
 
-const bunny = window.bunny;
-
-const tabsNavigationRef = bunny?.metro?.findByPropsLazy("getRootNavigationRef");
-const settingConstants = bunny?.metro?.findByPropsLazy(
-    "SETTING_RENDERER_CONFIG",
-);
-const SettingsOverviewScreen = bunny?.metro?.findByNameLazy(
-    "SettingsOverviewScreen",
-    false,
-);
-const createListModule = bunny.metro.findByPropsLazy("createList");
+const tabsNavigationRef = findByProps("getRootNavigationRef");
+const settingConstants = findByProps("SETTING_RENDERER_CONFIG");
+const SettingsOverviewScreen = findByName("SettingsOverviewScreen", false);
+const createListModule = findByProps("createList");
 
 function Section({ tabs }) {
     const navigation = NavigationNative.useNavigation();
@@ -48,10 +41,7 @@ function patchPanelUI(tabs, patches) {
         patches.push(
             after(
                 "default",
-                bunny?.metro?.findByNameLazy(
-                    "UserSettingsOverviewWrapper",
-                    false,
-                ),
+                findByName("UserSettingsOverviewWrapper", false),
                 (_, ret) => {
                     const UserSettingsOverview = findInReactTree(
                         ret.props.children,
